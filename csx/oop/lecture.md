@@ -34,13 +34,32 @@ user1.increment()
 
 
 **Challenge: Dog Constructor**
-- Declare a function ==Dog== that creates a new instance of a `Dog` object when invoked with the `new` keyword. Each `Dog` object should have a `name` property and a `breed` property, both strings which are passed in as arguments when calling the Dog function. It should also have a property called `tricks`, set to an array representing all the `tricks` that dog knows. When a new object is initiated, tricks should be empty.
+- Declare a function `Dog` that creates a new instance of a `Dog` object when invoked with the `new` keyword. Each `Dog` object should have a `name` property and a `breed` property, both strings which are passed in as arguments when calling the Dog function. It should also have a property called `tricks`, set to an array representing all the `tricks` that dog knows. When a new object is initiated, tricks should be empty.
 - All of your `Dog` objects must also have access to two methods that are stored on the constructor's `prototype`:
 - The first method, `learnTrick`, should take in a string as an argument and add that string to the `tricks` array of the particular Dog object it was called on.
 - The second method, `performTrick`, should also take a string as an argument. It should check to see if that string is in the `tricks` array belonging to the Dog `instance` it was called on; if so, it should log the string '`name` performed trick!' If not, log the string '`name` doesn't know that trick.
 
 
 **Challenge Inventory**
+Given Code:
+```javascript
+function Inventory(item, price) {
+  // add code here
+  
+}
+
+const myInventory = new Inventory('cucumber', 2);
+
+// Uncomment these lines to check your work!
+myInventory.addItem('carrot', 1);
+console.log(myInventory.checkItem('cucumber')); // Logs: { price: 2, quantity: 1 }
+myInventory.addItem('cucumber', 3); 
+console.log(myInventory.deleteItem('carrot')); // Logs: 'Deleted'
+console.log(myInventory.deleteItem('carrot')); // Logs: 'Nothing to delete'
+console.log(myInventory); // Logs: { cucumber: { price: 3, quantity: 2 }, carrot: { price: 1, quantity: 0 } }
+console.log(myInventory.checkItem('radish')); // Logs: 'Item is not in inventory'
+
+```
 -Declare a function Inventory that, when invoked with the new keyword, returns objects that keep track of an inventory. Your Inventory function should accept two arguments: item, a string, and price, a number. The object returned should contain a property whose key matches the passed-in item argument, and is set to another object with two properties: price (which will be set to the price argument the method was called with) and quantity, which should be initially set to 1.
 
 -Each object returned from this Inventory constructor should, via the prototype chain, have access to three methods:
