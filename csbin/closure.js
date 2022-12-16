@@ -143,40 +143,71 @@ rollCaller() // => should log 'Everyone accounted for'
 
 // CHALLENGE 8
 function saveOutput(func, magicWord) {
+    //create an object
+    const obj = {};
 
+    function innerFunction(word) {
+        if (word !== magicWord) {
+            obj[ word ] = func(word)
+        } else if (word === magicWord) {
+            return obj
+        }
+        //return object with inputs to callback as keys and outputs as values 
+    }
+    return innerFunction;
 }
 
 // /*** Uncomment these to check your work! ***/
-// const multiplyBy2 = function(num) { return num * 2; };
-// const multBy2AndLog = saveOutput(multiplyBy2, 'boo');
-// console.log(multBy2AndLog(2)); // => should log 4
-// console.log(multBy2AndLog(9)); // => should log 18
-// console.log(multBy2AndLog('boo')); // => should log { 2: 4, 9: 18 }
+const multiplyBy2 = function (num) { return num * 2; };
+const multBy2AndLog = saveOutput(multiplyBy2, 'boo');
+console.log(multBy2AndLog(2)); // => should log 4
+console.log(multBy2AndLog(9)); // => should log 18
+console.log(multBy2AndLog('boo')); // => should log { 2: 4, 9: 18 }
 
 
 // CHALLENGE 9
 function cycleIterator(array) {
+    let counter = 0;
 
+    function innerFunction() {
+        if (counter === array.length) {
+            counter = 0;
+        }
+        let cache = array[ counter ];
+        counter++;
+        return cache;
+        //return element of array 
+        //if end is reached, restart 
+    }
+    return innerFunction;
 }
 
+
 // /*** Uncomment these to check your work! ***/
-// const threeDayWeekend = ['Fri', 'Sat', 'Sun'];
-// const getDay = cycleIterator(threeDayWeekend);
-// console.log(getDay()); // => should log 'Fri'
-// console.log(getDay()); // => should log 'Sat'
-// console.log(getDay()); // => should log 'Sun'
-// console.log(getDay()); // => should log 'Fri'
+const threeDayWeekend = [ 'Fri', 'Sat', 'Sun' ];
+const getDay = cycleIterator(threeDayWeekend);
+console.log(getDay()); // => should log 'Fri'
+console.log(getDay()); // => should log 'Sat'
+console.log(getDay()); // => should log 'Sun'
+console.log(getDay()); // => should log 'Fri'
 
 
 // CHALLENGE 10
 function defineFirstArg(func, arg) {
 
+    function innerFunction(...args) {
+        //invokes the passed-in function with the passed-in arguments as 1st argument 
+        let result = func(arg, ...args)
+        //Additional arguments needed by passed-in function will need to be passed into returned funciton
+        return result;
+    }
+    return innerFunction;
 }
 
 // /*** Uncomment these to check your work! ***/
-// const subtract = function(big, small) { return big - small; };
-// const subFrom20 = defineFirstArg(subtract, 20);
-// console.log(subFrom20(5)); // => should log 15
+const subtract = function (big, small) { return big - small; };
+const subFrom20 = defineFirstArg(subtract, 20);
+console.log(subFrom20(5)); // => should log 15
 
 
 // CHALLENGE 11
