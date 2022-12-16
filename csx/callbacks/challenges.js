@@ -243,15 +243,20 @@ console.log(prioritize([ 'curb', 'rickandmorty', 'seinfeld', 'sunny', 'friends' 
 
 // Challenge 14
 function countBy(array, callback) {
+    //Create an object 
     const obj = {};
-
+    //Iterate over array and apply the callback to each element
     array.forEach(element => {
+        //Store the result of callback on elements in a var called "key" to be clear 
         const key = callback(element)
+        //Add key to object. If it doesn't exist initialize it with a value: 0 
         if (!obj[ key ]) {
             obj[ key ] = 0;
         }
+        //Else if the key does exist, increment the value associated with the key 
         obj[ key ]++;
     })
+    //Return the object 
     return obj;
 }
 
@@ -264,95 +269,164 @@ console.log(countBy([ 1, 2, 3, 4, 5 ], function (num) {
 
 // Challenge 15
 function groupBy(array, callback) {
-
+    const obj = {};
+    //Iterate through array performing callback on each element
+    array.forEach(element => {
+        //Each Return value from callback will be saved as -> key on object 
+        result = callback(element);
+        //Value of each key is an array of all elements that resulted in that return value from callback
+        if (!obj[ result ]) {
+            obj[ result ] = [ element ];
+        } else {
+            obj[ result ].push(element)
+        }
+    })
+    return obj;
 }
 
 // /*** Uncomment these to check your work! ***/
-// const decimals = [1.3, 2.1, 2.4];
-// const floored = function(num) { return Math.floor(num); };
-// console.log(groupBy(decimals, floored)); // should log: { 1: [1.3], 2: [2.1, 2.4] }
+const decimals = [ 1.3, 2.1, 2.4 ];
+const floored = function (num) { return Math.floor(num); };
+console.log(groupBy(decimals, floored)); // should log: { 1: [1.3], 2: [2.1, 2.4] }
+
 
 
 // Challenge 16
 function goodKeys(obj, callback) {
+    //callback returns true or false 
+    const arr = [];
+    //Iterate through object and perform callback on each value 
+    for (key in obj) {
+        let results = callback(obj[ key ]) //obj[key] => value , key=key 
+        if (results) {
+            arr.push(key)
+        }
+    }
+    return arr;
 
+    //Return an array of only the keys whose values yielded true from callback 
 }
 
 // /*** Uncomment these to check your work! ***/
-// const sunny = { mac: 'priest', dennis: 'calculating', charlie: 'birdlaw', dee: 'bird', frank: 'warthog' };
-// const startsWithBird = function(str) { return str.slice(0, 4).toLowerCase() === 'bird'; };
-// console.log(goodKeys(sunny, startsWithBird)); // should log: ['charlie', 'dee']
+const sunny = { mac: 'priest', dennis: 'calculating', charlie: 'birdlaw', dee: 'bird', frank: 'warthog' };
+const startsWithBird = function (str) { return str.slice(0, 4).toLowerCase() === 'bird'; };
+console.log(goodKeys(sunny, startsWithBird)); // should log: ['charlie', 'dee']
 
 
 // Challenge 17
 function commutative(func1, func2, value) {
-
+    //commutative returns a boolean
+    // true if value into func1 and then passing resulting value into func2 yields same result as 
+    let one = func2(func1(value))
+    if (one === func1(func2(value))) {
+        // console.log("testing: " + one)
+        return true;
+    }
+    return false;
+    // console.log("one" + one)
+    // passing value into func2 and then passing resulting value into func1 
 }
 
 // /*** Uncomment these to check your work! ***/
-// const multBy3 = n => n * 3;
-// const divBy4 = n => n / 4;
-// const subtract5 = n => n - 5;
-// console.log(commutative(multBy3, divBy4, 11)); // should log: true
-// console.log(commutative(multBy3, subtract5, 10)); // should log: false
-// console.log(commutative(divBy4, subtract5, 48)); // should log: false
+const multBy3 = n => n * 3;
+const divBy4 = n => n / 4;
+const subtract5 = n => n - 5;
+console.log(commutative(multBy3, divBy4, 11)); // should log: true 11 * 3 = 33 => 33/4 => 8.25ish ...11/4 = 2.3*3=8.25
+console.log(commutative(multBy3, subtract5, 10)); // should log: false
+console.log(commutative(divBy4, subtract5, 48)); // should log: false
 
 
 // Challenge 18
 function objFilter(obj, callback) {
-
+    //Make a new obj 
+    const newObj = {};
+    //Iterate through passed-in object, passing in each key to callback function 
+    for (key in obj) {
+        let result = callback(key);
+        if (result === obj[ key ]) {
+            newObj[ key ] = obj[ key ]
+        }
+    }
+    return newObj;
+    // If output from callback is equal to the key's value (key was cb's input)
+    //Then that key-value pair is copied into new object . 
+    //Return new object 
 }
 
 // /*** Uncomment these to check your work! ***/
-// const startingObj = {};
-// startingObj[6] = 3;
-// startingObj[2] = 1;
-// startingObj[12] = 4;
-// const half = n => n / 2;
-// console.log(objFilter(startingObj, half)); // should log: { 2: 1, 6: 3 }
+const startingObj = {};
+startingObj[ 6 ] = 3;
+startingObj[ 2 ] = 1;
+startingObj[ 12 ] = 4;
+const half = n => n / 2;
+console.log(objFilter(startingObj, half)); // should log: { 2: 1, 6: 3 }
 
 
 // Challenge 19
 function rating(arrOfFuncs, value) {
+    //Funcs in array return true or false 
+    let count = 0;
+    arrOfFuncs.forEach(func => {
+        if (func(value)) {
+            count++;
+        }
+    })
+    return (count / arrOfFuncs.length * 100)
+    //Rating() should return the percentage of functions from the array that return true when the value is used as input 
 
 }
 
 // /*** Uncomment these to check your work! ***/
-// const isEven = n => n % 2 === 0;
-// const greaterThanFour = n => n > 4;
-// const isSquare = n => Math.sqrt(n) % 1 === 0;
-// const hasSix = n => n.toString().includes('6');
-// const checks = [isEven, greaterThanFour, isSquare, hasSix];
-// console.log(rating(checks, 64)); // should log: 100
-// console.log(rating(checks, 66)); // should log: 75
+const isEven = n => n % 2 === 0;
+const greaterThanFour = n => n > 4;
+const isSquare = n => Math.sqrt(n) % 1 === 0;
+const hasSix = n => n.toString().includes('6');
+const checks = [ isEven, greaterThanFour, isSquare, hasSix ];
+console.log(rating(checks, 64)); // should log: 100
+console.log(rating(checks, 66)); // should log: 75
 
 
 // Challenge 20
-function pipe(arrOfFuncs, value) {
-
+function pipe(functions, value) {
+    return functions.reduce((accumulator, currentFunction) => currentFunction(accumulator), value);
 }
 
+
 // /*** Uncomment these to check your work! ***/
-// const capitalize = str => str.toUpperCase();
-// const addLowerCase = str => str + str.toLowerCase();
-// const repeat = str => str + str;
-// const capAddlowRepeat = [capitalize, addLowerCase, repeat];
-// console.log(pipe(capAddlowRepeat, 'cat')); // should log: 'CATcatCATcat'
+const capitalize = str => str.toUpperCase();
+const addLowerCase = str => str + str.toLowerCase();
+const repeat = str => str + str;
+const capAddlowRepeat = [ capitalize, addLowerCase, repeat ];
+console.log(pipe(capAddlowRepeat, 'cat')); // should log: 'CATcatCATcat'
 
 
 // Challenge 21
 function highestFunc(objOfFuncs, subject) {
+    // return the key of the object whose value which is a function 
+    //Iterate over object , passing in subject to the values/function of the key 
+    let acc = 0;
+    for (key in objOfFuncs) {
+        let result = objOfFuncs[ key ](subject)
+        let cache = result
+        if (cache > acc) {
+            acc = cache;
+            return objOfFuncs;
+        }
 
+
+    }
+    return acc;
+    //that returns the largest number when subject is used as input 
 }
 
 // /*** Uncomment these to check your work! ***/
-// const groupOfFuncs = {};
-// groupOfFuncs.double = n => n * 2;
-// groupOfFuncs.addTen = n => n + 10;
-// groupOfFuncs.inverse = n => n * -1;
-// console.log(highestFunc(groupOfFuncs, 5)); // should log: 'addTen'
-// console.log(highestFunc(groupOfFuncs, 11)); // should log: 'double'
-// console.log(highestFunc(groupOfFuncs, -20)); // should log: 'inverse'
+const groupOfFuncs = {};
+groupOfFuncs.double = n => n * 2;
+groupOfFuncs.addTen = n => n + 10;
+groupOfFuncs.inverse = n => n * -1;
+console.log(highestFunc(groupOfFuncs, 5)); // should log: 'addTen'
+console.log(highestFunc(groupOfFuncs, 11)); // should log: 'double'
+console.log(highestFunc(groupOfFuncs, -20)); // should log: 'inverse'
 
 
 // Challenge 22
