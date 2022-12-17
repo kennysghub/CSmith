@@ -215,7 +215,7 @@ function dateStamp(func) {
 
 }
 
-// /*** Uncomment these to check your work! ***/
+// // /*** Uncomment these to check your work! ***/
 // const stampedMultBy2 = dateStamp(n => n * 2);
 // console.log(stampedMultBy2(4)); // => should log { date: (today's date), output: 8 }
 // console.log(stampedMultBy2(6)); // => should log { date: (today's date), output: 12 }
@@ -223,124 +223,294 @@ function dateStamp(func) {
 
 // CHALLENGE 12
 function censor() {
-
+    let cache = {};
+    function innerFunction(string1, string2) {
+        //Two strings given: hold onto the two strings as pair 
+        if (string2) {
+            cache[ string1 ] = string2;
+            return;
+        }
+        Object.keys(cache).forEach(key => {
+            string1 = string1.replace(key, cache[ key ])
+        })
+        return string1
+        //One string given: reutrn same string, except, all string1s of saved pairs will be replaced with their corresponding second strings of those saved pairs 
+    }
+    return innerFunction;
 }
 
 // /*** Uncomment these to check your work! ***/
-// const changeScene = censor();
-// changeScene('dogs', 'cats');
-// changeScene('quick', 'slow');
-// console.log(changeScene('The quick, brown fox jumps over the lazy dogs.')); // => should log 'The slow, brown fox jumps over the lazy cats.'
+const changeScene = censor();
+changeScene('dogs', 'cats');
+changeScene('quick', 'slow');
+console.log(changeScene('The quick, brown fox jumps over the lazy dogs.')); // => should log 'The slow, brown fox jumps over the lazy cats.'
 
 
 // CHALLENGE 13
+// function createSecretHolder(secret) {
+//     //Create an object 
+//     let cache = secret
+//     //Returns an object with ONLY two methods. 
+//     return {
+//         getSecret: function () {
+//             return cache;
+//         },
+//         setSecret: function (input) {
+//             let cache = input
+//             return cache;
+//         }
+//     }
+//     //getSecret() which returns the secret -> getSecret() which sets the secret 
+// }
 function createSecretHolder(secret) {
+    // Declare a private variable to hold the secret
+    let _secret = secret;
 
+    // Return an object with getSecret and setSecret methods
+    return {
+        getSecret: function () {
+            return _secret;
+        },
+        setSecret: function (newSecret) {
+            _secret = newSecret;
+        }
+    }
 }
 
+const secretHolder = createSecretHolder('my secret');
+
+console.log(secretHolder.getSecret()); // 'my secret'
+
+secretHolder.setSecret('new secret');
+
+console.log(secretHolder.getSecret()); // 'new secret'
+
+
+
+
+
 // /*** Uncomment these to check your work! ***/
-// obj = createSecretHolder(5)
-// obj.getSecret() // => returns 5
-// obj.setSecret(2)
-// obj.getSecret() // => returns 2
+obj = createSecretHolder(5)
+console.log(obj.getSecret()) // => returns 5
+obj.setSecret(2)
+obj.getSecret() // => returns 2
 
 
 // CHALLENGE 14
 function callTimes() {
-
+    let counter = 0;
+    function innerFunction() {
+        //Return the number of times innerFunction has been called 
+        counter++;
+        return counter;
+    }
+    return innerFunction;
 }
 
 // /*** Uncomment these to check your work! ***/
-// let myNewFunc1 = callTimes();
-// let myNewFunc2 = callTimes();
-// myNewFunc1(); // => 1
-// myNewFunc1(); // => 2
-// myNewFunc2(); // => 1
-// myNewFunc2(); // => 2
-
+let myNewFunc1 = callTimes();
+let myNewFunc2 = callTimes();
+myNewFunc1(); // => 1
+console.log(myNewFunc1()); // => 2
+myNewFunc2(); // => 1
+myNewFunc2(); // => 2
+console.log(myNewFunc2()) //=> 3
 
 // CHALLENGE 15
-function roulette(num) {
+function roulette(n) {
+    //Counter records the number of times innerFunction has been invoked 
+    let counter = 0;
+    function innerFunction() {
+        //Return the string "spin" the first (n-1) number of times it's invoked 
+        counter++;
+        if (counter < n) {
+            return 'spin'
+        } else if (counter === n) {
 
+            return 'win'
+        } else {
+            return 'pick a number to play again';
+        }
+
+
+        //On the next invocation(the nth invocation),
+        //The returned function will return the string "win"
+        //On every invocation after that, the returned function returns "pick a number to play again"
+    }
+    return innerFunction;
 }
 
 // /*** Uncomment these to check your work! ***/
-// const play = roulette(3);
-// console.log(play()); // => should log 'spin'
-// console.log(play()); // => should log 'spin'
-// console.log(play()); // => should log 'win'
-// console.log(play()); // => should log 'pick a number to play again'
-// console.log(play()); // => should log 'pick a number to play again'
+const play = roulette(3);
+console.log(play()); // => should log 'spin'
+console.log(play()); // => should log 'spin'
+console.log(play()); // => should log 'win'
+console.log(play()); // => should log 'pick a number to play again'
+console.log(play()); // => should log 'pick a number to play again'
 
 
 // CHALLENGE 16
 function average() {
+    let count = 0;
+    let total = 0;
 
+    function inner(num = null) {
+        if (num !== null) {
+            count++;
+            total += num;
+            return total / count;
+        } else if (count === 0) {
+            return 0;
+        } else {
+            return total / count;
+        }
+    }
+    return inner
 }
-
 // /*** Uncomment these to check your work! ***/
-// const avgSoFar = average();
-// console.log(avgSoFar()); // => should log 0
-// console.log(avgSoFar(4)); // => should log 4
-// console.log(avgSoFar(8)); // => should log 6
-// console.log(avgSoFar()); // => should log 6
-// console.log(avgSoFar(12)); // => should log 8
-// console.log(avgSoFar()); // => should log 8
+const avgSoFar = average();
+console.log(avgSoFar()); // => should log 0
+console.log(avgSoFar(4)); // => should log 4
+console.log(avgSoFar(8)); // => should log 6
+console.log(avgSoFar()); // => should log 6
+console.log(avgSoFar(12)); // => should log 8
+console.log(avgSoFar()); // => should log 8
 
-
+console.log("____________________")
 // CHALLENGE 17
 function makeFuncTester(arrOfTests) {
+    //Accepts array of two-element sub-arrays 
+    function innerFunction(cb) {
+        //If 1st elements of each sub array passed into the callback, 
+        for (sub in arrOfTests) {
+            let result = cb(arrOfTests[ sub ][ 0 ])
+            if (result !== arrOfTests[ sub ][ 1 ]) {
+                return false;
+            }
+        }
+        return true;
+        // Yield the same value as the second element in respective sub-arrays,
+        //Return true 
 
+    }
+    return innerFunction;
 }
 
 // /*** Uncomment these to check your work! ***/
-// const capLastTestCases = [];
-// capLastTestCases.push(['hello', 'hellO']);
-// capLastTestCases.push(['goodbye', 'goodbyE']);
-// capLastTestCases.push(['howdy', 'howdY']);
-// const shouldCapitalizeLast = makeFuncTester(capLastTestCases);
-// const capLastAttempt1 = str => str.toUpperCase();
-// const capLastAttempt2 = str => str.slice(0, -1) + str.slice(-1).toUpperCase();
-// console.log(shouldCapitalizeLast(capLastAttempt1)); // => should log false
-// console.log(shouldCapitalizeLast(capLastAttempt2)); // => should log true
+const capLastTestCases = [];
+capLastTestCases.push([ 'hello', 'hellO' ]);
+capLastTestCases.push([ 'goodbye', 'goodbyE' ]);
+capLastTestCases.push([ 'howdy', 'howdY' ]);
+const shouldCapitalizeLast = makeFuncTester(capLastTestCases);
+const capLastAttempt1 = str => str.toUpperCase();
+const capLastAttempt2 = str => str.slice(0, -1) + str.slice(-1).toUpperCase();
+console.log(shouldCapitalizeLast(capLastAttempt1)); // => should log false
+console.log(shouldCapitalizeLast(capLastAttempt2)); // => should log true
 
 
 // CHALLENGE 18
 function makeHistory(limit) {
-
+    let newArr = [];
+    newArr.length = limit;
+    let len = newArr[ limit ]
+    function innerFunction(string) {
+        //Save a history of the most recent "limit" number of strings passed in 
+        if (string !== "undo") {
+            newArr.push(string)
+            //Everytime a string is passed in, ->return same string + "done" 
+            return string + " done";
+        } else if (string === "undo") {
+            if (newArr.length === 0) {
+                return "nothing to undo"
+            }
+            else if (newArr.length) {
+                let cache = newArr.pop()
+                newArr.pop()
+                return cache + " undone"
+            }
+        }
+        //BUT, if "undo" is passed in, delete the last string saved in history by 
+        //Returning that string + "undone" 
+        //BUT, if "undo" is passed into the function and history is empty, 
+        //Return "nothing to undo" 
+    }
+    return innerFunction;
 }
 
-// /*** Uncomment these to check your work! ***/
-// const myActions = makeHistory(2);
-// console.log(myActions('jump')); // => should log 'jump done'
-// console.log(myActions('undo')); // => should log 'jump undone'
-// console.log(myActions('walk')); // => should log 'walk done'
-// console.log(myActions('code')); // => should log 'code done'
-// console.log(myActions('pose')); // => should log 'pose done'
-// console.log(myActions('undo')); // => should log 'pose undone'
-// console.log(myActions('undo')); // => should log 'code undone'
-// console.log(myActions('undo')); // => should log 'nothing to undo'
+/*** Uncomment these to check your work! ***/
+const myActions = makeHistory(2);
+console.log(myActions('jump')); // => should log 'jump done'
+console.log(myActions('undo')); // => should log 'jump undone'
+console.log(myActions('walk')); // => should log 'walk done'
+console.log(myActions('code')); // => should log 'code done'
+console.log(myActions('pose')); // => should log 'pose done'
+console.log(myActions('undo')); // => should log 'pose undone'
+console.log(myActions('undo')); // => should log 'code undone'
+console.log(myActions('undo')); // => should log 'nothing to undo'
+
+
+
+
+
+
+
+
+
+
 
 
 // CHALLENGE 19
 function blackjack(array) {
+    //Rounds variable to track number of rounds 
+    let rounds = 0;
+    function dealer(card1, card2) {//i_live_dangerously 
 
+        function player() {
+            //1st player call: return sum of two numbers passed into DEALER 
+            rounds++;
+            let sumRoundOne = card1 + card2;
+            if (rounds === 0) {
+                rounds++;
+                return sumRoundOne;
+                //2nd player call: return either
+            } else if (rounds > 0) {
+                rounds++;
+                //A) 1st number in the array passed into blackjack + sum of two numbers passed into DEALER if sum < 21
+                if (sumRoundOne + array[ rounds - 2 ] <= 21) {
+                    let someRound = sumRoundOne + array[ rounds - 2 ]
+                    rounds++;
+                    return someRound;
+                } else if (sumRoundOne + array[ rounds - 2 ] > 21) {
+                    rounds++;
+                    return 'bust'
+                }
+
+            }
+            //Next player call will return either: 
+            //Recent sum + next number in array etc... 
+
+            //B) return "bust" if sum > 21
+            //If "bust" then every player call after that returns "you are done!"
+            // ->Will not use a number in the array 
+        }
+        return player;
+    }
+    return dealer;
 }
 
 // /*** Uncomment these to check your work! ***/
 
-// /*** DEALER ***/
-// const deal = blackjack([2, 6, 1, 7, 11, 4, 6, 3, 9, 8, 9, 3, 10, 4, 5, 3, 7, 4, 9, 6, 10, 11]);
-
-// /*** PLAYER 1 ***/
-// const i_like_to_live_dangerously = deal(4, 5);
-// console.log(i_like_to_live_dangerously()); // => should log 9
-// console.log(i_like_to_live_dangerously()); // => should log 11
-// console.log(i_like_to_live_dangerously()); // => should log 17
-// console.log(i_like_to_live_dangerously()); // => should log 18
-// console.log(i_like_to_live_dangerously()); // => should log 'bust'
-// console.log(i_like_to_live_dangerously()); // => should log 'you are done!'
-// console.log(i_like_to_live_dangerously()); // => should log 'you are done!'
+/*** DEALER ***/
+const deal = blackjack([ 2, 6, 1, 7, 11, 4, 6, 3, 9, 8, 9, 3, 10, 4, 5, 3, 7, 4, 9, 6, 10, 11 ]);
+/*** PLAYER 1 ***/
+const i_like_to_live_dangerously = deal(4, 5);
+console.log(i_like_to_live_dangerously()); // => should log 9 //player call() 
+console.log(i_like_to_live_dangerously()); // => should log 11
+console.log(i_like_to_live_dangerously()); // => should log 17
+console.log(i_like_to_live_dangerously()); // => should log 18
+console.log(i_like_to_live_dangerously()); // => should log 'bust'
+console.log(i_like_to_live_dangerously()); // => should log 'you are done!'
+console.log(i_like_to_live_dangerously()); // => should log 'you are done!'
 
 // /*** BELOW LINES ARE FOR THE BONUS ***/
 
@@ -360,3 +530,4 @@ function blackjack(array) {
 // console.log(i_ALSO_like_to_live_dangerously()); // => should log 'bust'
 // console.log(i_ALSO_like_to_live_dangerously()); // => should log 'you are done!
 // console.log(i_ALSO_like_to_live_dangerously()); // => should log 'you are done!
+
